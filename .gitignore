@@ -3,7 +3,7 @@
 SHA256SUMS*
 
 # Secrets
-private.key
+production/private.key
 
 # Test binary
 *.test

@@ -2,25 +2,32 @@ package main
 
 import (
 	"crypto"
+	"flag"
 	"fmt"
 	jwtMiddleware "github.com/codeby-student/go-service/pkg/middleware/jwt"
 	"github.com/codeby-student/go-service/pkg/utils"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"golang.org/x/exp/slices"
 	"log"
 	"net/http"
 	"os"
 )
 
+var (
+	mode       = flag.String("mode", "production", "Operate mode (production or test)")
+	validModes = []string{"production", "test"}
+)
+
 func main() {
-	publicKey, err := os.ReadFile("production/public.key")
+	if !slices.Contains(validModes, *mode) {
+		log.Fatal("invalid operate mode")
+	}
+
+	publicKey, err := os.ReadFile(fmt.Sprintf("%s/public.key", *mode))
 	if err != nil {
 		log.Fatal(fmt.Errorf("error read public key: %w", err))
 	}
-	//privateKey, err := os.ReadFile("private.key")
-	//if err != nil {
-	//	log.Fatal(fmt.Errorf("error read private key: %w", err))
-	//}
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
