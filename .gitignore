@@ -2,6 +2,9 @@
 *.bin
 SHA256SUMS*
 
+# Secrets
+private.key
+
 # Test binary
 *.test
 
